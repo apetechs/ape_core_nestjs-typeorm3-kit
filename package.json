@@ -19,9 +19,22 @@
     "url": "git+https://github.com/x302502/nestjs-typeorm3-kit.git"
   },
   "keywords": [
+    "nestjs-typeorm3-kit",
+    "custom repository typeorm 0.3x",
+    "support multiple connection",
     "nestjs",
     "typeorm",
-    "typescript"
+    "typeorm 0.3",
+    "nestjs typeorm",
+    "typeorm transaction",
+    "nestjs repository",
+    "nestjs database",
+    "nestjs module",
+    "database wrapper",
+    "decorator",
+    "unit of work",
+    "repository pattern",
+    "nestjs-typeorm"
   ],
   "author": "thanhluan.bkhn <thanhluan.bkhn@gmail.com>",
   "license": "MIT",
