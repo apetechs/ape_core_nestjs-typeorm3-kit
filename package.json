@@ -1,0 +1,8 @@
+{
+  "name": "nestjs-typeorm3-kit",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/x302502/nestjs-typeorm3-kit.git",
+  "author": "thanhluan.bkhn <thanhluan.bkhn@gmail.com>",
+  "license": "MIT"
+}
