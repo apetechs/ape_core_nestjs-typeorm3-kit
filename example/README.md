@@ -1,98 +1,246 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS TypeORM3 Kit Example
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This directory contains a complete example application demonstrating how to use the `nestjs-typeorm3-kit` package with TypeORM 3 in a NestJS application.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Overview
 
-## Description
+This example showcases:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Multiple database connections (primary and secondary)
+- Transaction management with `typeorm-transactional`
+- Domain-driven structure for organizing entities and modules
+- TypeORM entity configuration and relationships
 
-## Project setup
+## Prerequisites
+
+- Node.js (v16 or higher recommended)
+- PostgreSQL (or other database supported by TypeORM)
+- Yarn, NPM, pnpm, or bun package manager
+
+## Getting Started
+
+### 1. Install Dependencies
 
 ```bash
-$ yarn install
+# Using npm
+npm install
+
+# Using yarn
+yarn install
+
+# Using pnpm
+pnpm install
+
+# Using bun
+bun install
 ```
 
-## Compile and run the project
+### 2. Configure Database Connections
+
+The example is configured with two database connections:
+
+#### Primary Database (src/databases/primary.database.ts)
+
+```typescript
+const primaryDatabase = TypeOrmModule.forRootAsync({
+  name: PRIMARY_CONNECTION, // primary connection
+  useFactory: () => ({
+    type: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    username: 'postgres',
+    password: 'Abc12345',
+    database: 'primary_db',
+    entities: [join(__dirname, './domains/primary/**/*.entity.{ts,js}')],
+    synchronize: true,
+    autoLoadEntities: true,
+    retryAttempts: 2,
+    retryDelay: 1000,
+  }),
+  dataSourceFactory: async (options: DataSourceOptions) => {
+    if (!options) {
+      throw new Error('Invalid options passed');
+    }
+    return addTransactionalDataSource({
+      dataSource: new DataSource(options),
+      name: PRIMARY_CONNECTION,
+    });
+  },
+});
+const secondaryDatabase = TypeOrmModule.forRootAsync({
+  name: SECONDARY_CONNECTION, // secondary connection
+  useFactory: () => ({
+    type: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    username: 'postgres',
+    password: 'Abc12345',
+    database: 'secondary_db',
+    entities: [join(__dirname, './domains/secondary/**/*.entity.{ts,js}')],
+    synchronize: true,
+    autoLoadEntities: true,
+    retryAttempts: 2,
+    retryDelay: 1000,
+  }),
+  dataSourceFactory: async (options: DataSourceOptions) => {
+    if (!options) {
+      throw new Error('Invalid options passed');
+    }
+    return addTransactionalDataSource({
+      dataSource: new DataSource(options),
+      name: SECONDARY_CONNECTION,
+    });
+  },
+});
+// databases/index.ts
+import { primaryDatabase } from './primary.database';
+import { secondaryDatabase } from './secondary.database';
+
+export const databases = [primaryDatabase, secondaryDatabase];
+```
+
+#### Secondary Database (src/databases/secondary.database.ts)
+
+Similarly configured with different database name and connection parameters.
+
+### 3. Entity Configuration
+
+Entities should be placed in the appropriate domain directory:
+
+- Primary database entities: `src/domains/primary/`
+- Secondary database entities: `src/domains/secondary/`
+
+Example entity structure:
+
+```typescript
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity()
+export class Book {
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @Column({ length: 500 })
+  name!: string;
+
+  @Column('text')
+  description!: string;
+}
+
+import { Repository, FindOneOptions, DeepPartial, SaveOptions } from 'typeorm';
+
+export class BaseRepo<Entity> extends Repository<Entity> {
+  async findOrCreate(value: Partial<Entity>, options?: FindOneOptions<Entity>) {
+    let entity = (await this.findOne(options)) as any;
+
+    if (!entity) {
+      entity = await this.save(value as DeepPartial<Entity>);
+    }
+    return entity;
+  }
+  async saves(entities: DeepPartial<Entity>[], options: SaveOptions = {}) {
+    const newOption: SaveOptions = { reload: true, chunk: 10000, ...options };
+    return this.save(entities, newOption);
+  }
+}
+
+import { Book } from './book.entity';
+import { DefEntityRepository } from 'nestjs-typeorm3-kit';
+import { BaseRepo } from '../../base.repo';
+
+@DefEntityRepository(Book)
+export class BookRepo extends BaseRepo<Book> {}
+```
+
+### 4. Using Transactions
+
+The example uses `typeorm-transactional` for transaction management:
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { ListDemoReq } from './dto';
+import { DefTransaction, InjectRepo } from 'nestjs-typeorm3-kit';
+import { PhotoRepo } from '~/domains/primary/photo/photo.repo';
+import { BookRepo } from '~/domains/primary/book/book.repo';
+import { DataLogRepo } from '~/domains/secondary/data-log/data-log.repo';
+import { SECONDARY_CONNECTION } from '~/common/constants';
+import { ExampleRepo } from '~/domains/secondary/example/example.repo';
+
+@Injectable()
+export class DemoService {
+  constructor(
+    readonly photoRepo: PhotoRepo,
+    readonly bookRepo: BookRepo,
+
+    @InjectRepo(ExampleRepo, SECONDARY_CONNECTION)
+    readonly exampleRepo: ExampleRepo,
+
+    @InjectRepo(DataLogRepo, SECONDARY_CONNECTION)
+    readonly dataLogRepo: DataLogRepo,
+  ) {}
+
+  async getData(params: ListDemoReq) {
+    return this.bookRepo.find(params);
+  }
+
+  @DefTransaction({ connectionName: SECONDARY_CONNECTION })
+  create(body: any) {
+    return this.exampleRepo.save(body);
+  }
+}
+
+// app.module.ts
+@Module({
+  imports: [...databases, ...modules],
+})
+export class AppModule {}
+```
+
+### 5. Running the Example
 
 ```bash
-# development
-$ yarn run start
+# Development mode
+npm run start:dev
 
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+# Production mode
+npm run build
+npm run start:prod
 ```
 
-## Run tests
+## Project Structure
 
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+```
+├── src/
+│   ├── app.module.ts          # Main application module
+│   ├── main.ts                # Application entry point
+│   ├── common/                # Common utilities and constants
+│   ├── databases/             # Database connection configurations
+│   ├── domains/               # Domain entities organized by database
+│   └── modules/               # Feature modules
+├── test/                      # Test files
+├── nest-cli.json              # NestJS CLI configuration
+├── package.json               # Dependencies and scripts
+└── tsconfig.json              # TypeScript configuration
 ```
 
-## Deployment
+## Additional Configuration
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Environment Variables
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+For production use, replace hardcoded database credentials with environment variables:
 
-```bash
-$ yarn install -g @nestjs/mau
-$ mau deploy
+```typescript
+useFactory: () => ({
+  type: 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT || '5432', 10),
+  username: process.env.DB_USERNAME || 'postgres',
+  password: process.env.DB_PASSWORD || 'password',
+  database: process.env.DB_DATABASE || 'primary_db',
+  // ...
+}),
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Learn More
 
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+For complete documentation, visit the [nestjs-typeorm3-kit documentation](https://x302502.github.io/nestjs-typeorm3-kit/).
