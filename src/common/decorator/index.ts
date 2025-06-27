@@ -5,7 +5,7 @@ export function Emoji() {
     const getter = () => {
       return val;
     };
-    const setter = next => {
+    const setter = (next) => {
       // console.log('updating flavor...');
       val = `🍦 ${next} 🍦`;
     };

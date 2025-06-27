@@ -1,15 +1,15 @@
-import { DynamicModule, ModuleMetadata, Provider, Type } from '@nestjs/common';
-import { getDataSourceToken } from '@nestjs/typeorm';
-import type { DataSource, DataSourceOptions } from 'typeorm';
+import { DynamicModule, ModuleMetadata, Provider, Type } from "@nestjs/common";
+import { getDataSourceToken } from "@nestjs/typeorm";
+import type { DataSource, DataSourceOptions } from "typeorm";
 
-import { getEntityByRepository, getDefRepositoryToken } from '../config/utils';
-import type { Repository } from '../config/types';
-import * as FastGlob from 'fast-glob';
+import { getEntityByRepository, getDefRepositoryToken } from "../config/utils";
+import type { Repository } from "../config/types";
+import FastGlob from "fast-glob";
 import {
   DEF_REPO_DYNAMIC_PROVIDERS,
   DEF_REPOSITORY_OPTIONS,
   ENTITY_METADATA_KEY,
-} from '../config/constants';
+} from "../config/constants";
 
 export interface DefRepositoryModuleOptions {
   globPattern: string;
@@ -17,11 +17,16 @@ export interface DefRepositoryModuleOptions {
 }
 
 export interface DefRepositoryOptionsFactory {
-  createDefRepositoryOptions(): Promise<DefRepositoryModuleOptions> | DefRepositoryModuleOptions;
+  createDefRepositoryOptions():
+    | Promise<DefRepositoryModuleOptions>
+    | DefRepositoryModuleOptions;
 }
 
-export interface DefRepositoryModuleAsyncOptions extends Pick<ModuleMetadata, 'imports'> {
-  useFactory?: (...args: any[]) => Promise<DefRepositoryModuleOptions> | DefRepositoryModuleOptions;
+export interface DefRepositoryModuleAsyncOptions
+  extends Pick<ModuleMetadata, "imports"> {
+  useFactory?: (
+    ...args: any[]
+  ) => Promise<DefRepositoryModuleOptions> | DefRepositoryModuleOptions;
   useClass?: Type<DefRepositoryOptionsFactory>;
   useExisting?: Type<DefRepositoryOptionsFactory>;
   inject?: any[];
@@ -29,14 +34,18 @@ export interface DefRepositoryModuleAsyncOptions extends Pick<ModuleMetadata, 'i
 
 function getProviders(
   repositories: Repository[],
-  dataSource?: string | DataSource | DataSourceOptions,
+  dataSource?: string | DataSource | DataSourceOptions
 ): Provider[] {
-  return repositories.map(repository => {
+  return repositories.map((repository) => {
     const entity = getEntityByRepository(repository);
     return {
       provide: getDefRepositoryToken(repository, dataSource),
       useFactory: (dataSource: DataSource) => {
-        return new repository(entity, dataSource.manager, dataSource?.createQueryRunner());
+        return new repository(
+          entity,
+          dataSource.manager,
+          dataSource?.createQueryRunner()
+        );
       },
       inject: [getDataSourceToken(dataSource)],
     };
@@ -49,7 +58,7 @@ export class DefRepositoryModule {
    */
   static forFeature(
     repositories: Repository[],
-    dataSource?: string | DataSource | DataSourceOptions,
+    dataSource?: string | DataSource | DataSourceOptions
   ): DynamicModule {
     const providers = getProviders(repositories, dataSource);
     return { module: DefRepositoryModule, providers, exports: providers };
@@ -58,9 +67,13 @@ export class DefRepositoryModule {
   /**
    * Root async registration using glob pattern
    */
-  static async forRoot(options: DefRepositoryModuleOptions): Promise<DynamicModule> {
-    const repositories = await DefRepositoryModule.loadRepositories(options.globPattern);
-    console.log('==== forRoot ===', repositories);
+  static async forRoot(
+    options: DefRepositoryModuleOptions
+  ): Promise<DynamicModule> {
+    const repositories = await DefRepositoryModule.loadRepositories(
+      options.globPattern
+    );
+    console.log("==== forRoot ===", repositories);
     const providers = getProviders(repositories, options.dataSource);
     return { module: DefRepositoryModule, providers, exports: providers };
   }
@@ -68,7 +81,9 @@ export class DefRepositoryModule {
   /**
    * Asynchronous DI-based registration
    */
-  static async forRootAsync(options: DefRepositoryModuleAsyncOptions): Promise<DynamicModule> {
+  static async forRootAsync(
+    options: DefRepositoryModuleAsyncOptions
+  ): Promise<DynamicModule> {
     // Step 1: Resolve options
     const asyncProviders = DefRepositoryModule.createAsyncProviders(options);
 
@@ -76,7 +91,9 @@ export class DefRepositoryModule {
     const opts = await DefRepositoryModule.resolveOptions(options);
 
     // Step 2: Load repo classes matching @DefEntityRepository
-    const repositories = await DefRepositoryModule.loadRepositories(opts.globPattern);
+    const repositories = await DefRepositoryModule.loadRepositories(
+      opts.globPattern
+    );
 
     // Step 3: Create repo providers
     const providers = getProviders(repositories, opts.dataSource);
@@ -89,7 +106,9 @@ export class DefRepositoryModule {
     };
   }
 
-  private static createAsyncProviders(options: DefRepositoryModuleAsyncOptions): Provider[] {
+  private static createAsyncProviders(
+    options: DefRepositoryModuleAsyncOptions
+  ): Provider[] {
     if (options.useFactory) {
       return [
         {
@@ -103,7 +122,7 @@ export class DefRepositoryModule {
     const injectClass = options.useClass || options.useExisting;
     if (!injectClass) {
       throw new Error(
-        'Invalid async configuration. Must provide useFactory, useClass, or useExisting.',
+        "Invalid async configuration. Must provide useFactory, useClass, or useExisting."
       );
     }
 
@@ -123,7 +142,7 @@ export class DefRepositoryModule {
     return providers;
   }
   private static async resolveOptions(
-    options: DefRepositoryModuleAsyncOptions,
+    options: DefRepositoryModuleAsyncOptions
   ): Promise<DefRepositoryModuleOptions> {
     if (options.useFactory) {
       return await options.useFactory(...(options.inject || []));
@@ -131,7 +150,9 @@ export class DefRepositoryModule {
 
     const injectClass = options.useClass || options.useExisting;
     if (!injectClass) {
-      throw new Error('Missing configuration provider (useClass, useExisting or useFactory).');
+      throw new Error(
+        "Missing configuration provider (useClass, useExisting or useFactory)."
+      );
     }
 
     const instance: DefRepositoryOptionsFactory = new injectClass();
@@ -143,8 +164,11 @@ export class DefRepositoryModule {
     for (const file of files) {
       const moduleExports = await import(file);
       for (const exported of Object.values(moduleExports)) {
-        if (typeof exported === 'function') {
-          const hasEntityMeta = Reflect.hasMetadata(ENTITY_METADATA_KEY, exported);
+        if (typeof exported === "function") {
+          const hasEntityMeta = Reflect.hasMetadata(
+            ENTITY_METADATA_KEY,
+            exported
+          );
           if (hasEntityMeta) {
             repositories.push(exported);
           }

@@ -1,48 +1,65 @@
-import { Type } from 'class-transformer';
+import { Type } from "class-transformer";
 import {
-  IsNumber as libIsNumber,
-  Matches,
+  IsNumber as LibIsNumber,
   IsOptional,
-  IsPhoneNumber as libIsPhoneNumber,
+  IsPhoneNumber as LibIsPhoneNumber,
   registerDecorator,
   ValidationArguments,
   ValidationOptions,
-} from 'class-validator';
-import { CountryCode } from 'libphonenumber-js';
+} from "class-validator";
+import { CountryCode } from "libphonenumber-js";
+
 export interface IValidationOptions extends ValidationOptions {
   required?: boolean;
 }
+
+/**
+ * Custom PhoneNumber validator using class-transformer and class-validator
+ */
 export function IsPhoneNumber(
   region: CountryCode,
-  validationOptions?: ValidationOptions,
+  validationOptions?: ValidationOptions
 ): PropertyDecorator {
-  return function (target: Object, propertyKey: string) {
-    Type(t => String)(target, propertyKey);
-    libIsPhoneNumber(region, validationOptions)(target, propertyKey);
+  return function (target: Object, propertyKey: string | symbol) {
+    Type(() => String)(target, propertyKey);
+    LibIsPhoneNumber(region, validationOptions)(target, propertyKey);
   };
 }
-export function IsNumber(validationOptions?: IValidationOptions): PropertyDecorator {
-  return function (target: Object, propertyKey: string) {
-    let required = false;
-    if (validationOptions && validationOptions.required) {
-      required = validationOptions.required;
-    }
-    if (!required) {
+
+/**
+ * Custom IsNumber decorator with optional support and transform
+ */
+export function IsNumber(
+  validationOptions?: IValidationOptions
+): PropertyDecorator {
+  return function (target: Object, propertyKey: string | symbol) {
+    const isRequired = validationOptions?.required ?? false;
+
+    if (!isRequired) {
       IsOptional({ each: true })(target, propertyKey);
     }
-    Type(t => Number)(target, propertyKey);
-    libIsNumber({ allowNaN: false }, validationOptions)(target, propertyKey);
+
+    Type(() => Number)(target, propertyKey);
+    LibIsNumber({ allowNaN: false }, validationOptions)(target, propertyKey);
   };
 }
-export function IsLongerThan(property: string, validationOptions: ValidationOptions = {}) {
-  return function (object: Object, propertyName: string) {
+
+/**
+ * Custom validator: checks if current property is longer than another property
+ */
+export function IsLongerThan(
+  property: string,
+  validationOptions: ValidationOptions = {}
+): PropertyDecorator {
+  return function (object: Object, propertyKey: string | symbol) {
     if (!validationOptions.message) {
-      Object.assign(validationOptions, { message: `${propertyName} must be longer than ` });
+      validationOptions.message = `${String(propertyKey)} must be longer than ${property}`;
     }
+
     registerDecorator({
-      name: 'isLongerThan',
+      name: "isLongerThan",
       target: object.constructor,
-      propertyName: propertyName,
+      propertyName: propertyKey as string,
       constraints: [property],
       options: validationOptions,
       validator: {
@@ -50,10 +67,10 @@ export function IsLongerThan(property: string, validationOptions: ValidationOpti
           const [relatedPropertyName] = args.constraints;
           const relatedValue = (args.object as any)[relatedPropertyName];
           return (
-            typeof value === 'string' &&
-            typeof relatedValue === 'string' &&
+            typeof value === "string" &&
+            typeof relatedValue === "string" &&
             value.length > relatedValue.length
-          ); // you can return a Promise<boolean> here as well, if you want to make async validation
+          );
         },
       },
     });
