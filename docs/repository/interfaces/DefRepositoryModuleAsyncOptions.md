@@ -6,7 +6,7 @@
 
 # Interface: DefRepositoryModuleAsyncOptions
 
-Defined in: [src/repository/module/index.ts:25](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/module/index.ts#L25)
+Defined in: [src/repository/module/index.ts:25](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/module/index.ts#L25)
 
 ## Extends
 
@@ -33,7 +33,7 @@ required in this module.
 
 > `optional` **inject**: `any`[]
 
-Defined in: [src/repository/module/index.ts:32](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/module/index.ts#L32)
+Defined in: [src/repository/module/index.ts:32](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/module/index.ts#L32)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [src/repository/module/index.ts:32](https://github.com/x302502/nestj
 
 > `optional` **useClass**: `Type`\<[`DefRepositoryOptionsFactory`](DefRepositoryOptionsFactory.md)\>
 
-Defined in: [src/repository/module/index.ts:30](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/module/index.ts#L30)
+Defined in: [src/repository/module/index.ts:30](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/module/index.ts#L30)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [src/repository/module/index.ts:30](https://github.com/x302502/nestj
 
 > `optional` **useExisting**: `Type`\<[`DefRepositoryOptionsFactory`](DefRepositoryOptionsFactory.md)\>
 
-Defined in: [src/repository/module/index.ts:31](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/module/index.ts#L31)
+Defined in: [src/repository/module/index.ts:31](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/module/index.ts#L31)
 
 ***
 
@@ -57,7 +57,7 @@ Defined in: [src/repository/module/index.ts:31](https://github.com/x302502/nestj
 
 > `optional` **useFactory**: (...`args`) => [`DefRepositoryModuleOptions`](DefRepositoryModuleOptions.md) \| `Promise`\<[`DefRepositoryModuleOptions`](DefRepositoryModuleOptions.md)\>
 
-Defined in: [src/repository/module/index.ts:27](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/module/index.ts#L27)
+Defined in: [src/repository/module/index.ts:27](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/module/index.ts#L27)
 
 #### Parameters
 

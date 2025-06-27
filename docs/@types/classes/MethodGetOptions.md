@@ -6,7 +6,7 @@
 
 # Class: MethodGetOptions
 
-Defined in: [src/@types/index.ts:6](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/@types/index.ts#L6)
+Defined in: [src/@types/index.ts:6](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/@types/index.ts#L6)
 
 ## Extended by
 
@@ -28,7 +28,7 @@ Defined in: [src/@types/index.ts:6](https://github.com/x302502/nestjs-typeorm3-k
 
 > `optional` **responseType**: `string` \| `Function` \| `Type`\<`unknown`\> \| \[`Function`\]
 
-Defined in: [src/@types/index.ts:9](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/@types/index.ts#L9)
+Defined in: [src/@types/index.ts:9](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/@types/index.ts#L9)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/@types/index.ts:9](https://github.com/x302502/nestjs-typeorm3-k
 
 > `optional` **statusCode**: `HttpStatus` = `HttpStatus.OK`
 
-Defined in: [src/@types/index.ts:8](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/@types/index.ts#L8)
+Defined in: [src/@types/index.ts:8](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/@types/index.ts#L8)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/@types/index.ts:8](https://github.com/x302502/nestjs-typeorm3-k
 
 > `optional` **summary**: `string` = `''`
 
-Defined in: [src/@types/index.ts:7](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/@types/index.ts#L7)
+Defined in: [src/@types/index.ts:7](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/@types/index.ts#L7)

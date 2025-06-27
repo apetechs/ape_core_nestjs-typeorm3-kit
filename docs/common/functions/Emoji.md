@@ -8,7 +8,7 @@
 
 > **Emoji**(): (`target`, `key`) => `void`
 
-Defined in: [src/common/decorator/index.ts:1](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/common/decorator/index.ts#L1)
+Defined in: [src/common/decorator/index.ts:1](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/common/decorator/index.ts#L1)
 
 ## Returns
 

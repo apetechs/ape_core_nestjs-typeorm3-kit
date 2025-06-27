@@ -6,7 +6,7 @@
 
 # Class: DefRepositoryModule
 
-Defined in: [src/repository/module/index.ts:55](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/module/index.ts#L55)
+Defined in: [src/repository/module/index.ts:55](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/module/index.ts#L55)
 
 ## Constructors
 
@@ -24,7 +24,7 @@ Defined in: [src/repository/module/index.ts:55](https://github.com/x302502/nestj
 
 > `static` **forFeature**(`repositories`, `dataSource?`): `DynamicModule`
 
-Defined in: [src/repository/module/index.ts:59](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/module/index.ts#L59)
+Defined in: [src/repository/module/index.ts:59](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/module/index.ts#L59)
 
 Manual registration for feature modules
 
@@ -48,7 +48,7 @@ Manual registration for feature modules
 
 > `static` **forRoot**(`options`): `Promise`\<`DynamicModule`\>
 
-Defined in: [src/repository/module/index.ts:70](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/module/index.ts#L70)
+Defined in: [src/repository/module/index.ts:70](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/module/index.ts#L70)
 
 Root async registration using glob pattern
 
@@ -68,7 +68,7 @@ Root async registration using glob pattern
 
 > `static` **forRootAsync**(`options`): `Promise`\<`DynamicModule`\>
 
-Defined in: [src/repository/module/index.ts:84](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/module/index.ts#L84)
+Defined in: [src/repository/module/index.ts:84](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/module/index.ts#L84)
 
 Asynchronous DI-based registration
 

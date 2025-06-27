@@ -8,4 +8,4 @@
 
 > `const` **DEF\_REPOSITORY\_OPTIONS**: `"DEF_REPOSITORY_OPTIONS"` = `'DEF_REPOSITORY_OPTIONS'`
 
-Defined in: [src/repository/config/constants.ts:4](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/config/constants.ts#L4)
+Defined in: [src/repository/config/constants.ts:4](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/config/constants.ts#L4)

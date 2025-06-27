@@ -6,7 +6,7 @@
 
 # Interface: DefRepositoryOptionsFactory
 
-Defined in: [src/repository/module/index.ts:19](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/module/index.ts#L19)
+Defined in: [src/repository/module/index.ts:19](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/module/index.ts#L19)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [src/repository/module/index.ts:19](https://github.com/x302502/nestj
 
 > **createDefRepositoryOptions**(): [`DefRepositoryModuleOptions`](DefRepositoryModuleOptions.md) \| `Promise`\<[`DefRepositoryModuleOptions`](DefRepositoryModuleOptions.md)\>
 
-Defined in: [src/repository/module/index.ts:20](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/repository/module/index.ts#L20)
+Defined in: [src/repository/module/index.ts:20](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/repository/module/index.ts#L20)
 
 #### Returns
 

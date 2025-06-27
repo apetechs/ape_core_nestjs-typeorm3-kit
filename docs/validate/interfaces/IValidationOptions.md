@@ -6,7 +6,7 @@
 
 # Interface: IValidationOptions
 
-Defined in: [src/validate/decorator/index.ts:12](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/validate/decorator/index.ts#L12)
+Defined in: [src/validate/decorator/index.ts:12](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/validate/decorator/index.ts#L12)
 
 ## Extends
 
@@ -87,4 +87,4 @@ Message can be either string or a function that returns a string.
 
 > `optional` **required**: `boolean`
 
-Defined in: [src/validate/decorator/index.ts:13](https://github.com/x302502/nestjs-typeorm3-kit/blob/313e27f27be24cb76b799a33cc27551fc0070682/src/validate/decorator/index.ts#L13)
+Defined in: [src/validate/decorator/index.ts:13](https://github.com/x302502/nestjs-typeorm3-kit/blob/6ef69742f766c1a8d18cd622a628a96085a8d4cc/src/validate/decorator/index.ts#L13)
