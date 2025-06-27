@@ -10,7 +10,9 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "test": "jest --config ./tests/jest.config.json --detectOpenHandles",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "gen-docs": "typedoc --plugin typedoc-plugin-markdown --out docs src/**/*.ts",
+    "gen-docs-github": "npx typedoc --theme github-wiki src/**/*.ts"
   },
   "repository": {
     "type": "git",
@@ -54,6 +56,9 @@
     "reflect-metadata": "^0.2.2",
     "rimraf": "^6.0.1",
     "ts-jest": "^29.4.0",
+    "typedoc": "^0.28.6",
+    "typedoc-github-wiki-theme": "^2.1.0",
+    "typedoc-plugin-markdown": "^4.7.0",
     "typeorm": "^0.3.25",
     "typeorm-transactional": "^0.5.0",
     "typescript": "^5.8.3"
