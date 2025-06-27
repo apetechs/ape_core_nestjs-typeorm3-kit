@@ -242,6 +242,8 @@ async function bootstrap() {
 bootstrap();
 ```
 
+![Swagger UI](image.png)
+
 #### Example
 
 [Example](./example)
