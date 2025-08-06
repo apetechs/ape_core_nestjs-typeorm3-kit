@@ -6,7 +6,6 @@ import { getEntityByRepository, getDefRepositoryToken } from "../config/utils";
 import type { Repository } from "../config/types";
 import FastGlob from "fast-glob";
 import {
-  DEF_REPO_DYNAMIC_PROVIDERS,
   DEF_REPOSITORY_OPTIONS,
   ENTITY_METADATA_KEY,
 } from "../config/constants";
