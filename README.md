@@ -65,6 +65,14 @@ TypeOrmModule.forRootAsync({
 });
 ```
 
+#### Use RepositoryWrapper fix findOne typeOrm (change return first to return null)
+
+```typescript
+import { RepositoryWrapper } from "nestjs-typeorm3-kit";
+
+export class BaseRepo<Entity> extends RepositoryWrapper<Entity> {}
+```
+
 #### create Repository module Use @DefRepositoryModule
 
 ```typescript
@@ -202,27 +210,7 @@ const configSwagger = (app: INestApplication) => {
   const document = SwaggerModule.createDocument(app as any, options, {
     // extraModels: [PageResponse]
   });
-
-  // Creating all the swagger schemas based on the class-validator decorators
-  const metadatas = (getFromContainer(MetadataStorage) as any)
-    .validationMetadatas;
-  const targetSchemas = document.components.schemas || {};
-  const schemasBinding = validationMetadatasToSchemas(metadatas) || {};
-
-  Object.keys(schemasBinding).forEach((key) => {
-    const value = schemasBinding[key] as SchemasObject;
-    if (!targetSchemas[key]) {
-      Object.assign(targetSchemas, { key: value });
-    } else {
-      const targetValue = targetSchemas[key] as SchemasObject;
-
-      Object.assign(targetValue.properties, value.properties);
-      targetValue.required = value.required;
-      Object.assign(targetSchemas, { key: targetValue });
-    }
-  });
-  document.components.schemas = Object.assign({}, targetSchemas);
-  SwaggerModule.setup("swagger", app as any, document);
+  configSwaggerDocument(app, document, "swagger");
 };
 
 async function bootstrap() {

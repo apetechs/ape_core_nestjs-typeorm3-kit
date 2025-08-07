@@ -72,7 +72,6 @@ export class DefRepositoryModule {
     const repositories = await DefRepositoryModule.loadRepositories(
       options.globPattern
     );
-    console.log("==== forRoot ===", repositories);
     const providers = getProviders(repositories, options.dataSource);
     return { module: DefRepositoryModule, providers, exports: providers };
   }
@@ -158,6 +157,8 @@ export class DefRepositoryModule {
     return await instance.createDefRepositoryOptions();
   }
   private static async loadRepositories(globPattern: string) {
+    // fix globPattern windows path
+    globPattern = globPattern.replace(/\\/g, "/");
     const files = await FastGlob(globPattern, { absolute: true });
     const repositories: any[] = [];
     for (const file of files) {
