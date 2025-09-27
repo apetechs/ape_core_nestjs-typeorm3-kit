@@ -1,0 +1,1 @@
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../src/module/decorator/index.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,cAAc,EAAE,MAAM,2BAA2B,CAAC;AAG3D,MAAM,WAAW,oBAAqB,SAAQ,cAAc;IAC1D,MAAM,CAAC,EAAE,MAAM,CAAC;CACjB;AAyBD,wBAAgB,WAAW,CAAC,aAAa,CAAC,EAAE,oBAAoB,GAAG,cAAc,CA2BhF"}
